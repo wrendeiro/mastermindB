@@ -48,7 +48,7 @@ class Users extends REST_Controller {
             
             $this->user->insert($data);
             
-            $this->set_response(json_encode($data));
+            echo json_encode($data);
             
         }
         
@@ -85,7 +85,7 @@ class Users extends REST_Controller {
             
             
             
-            $this->set_response(json_encode($data));
+            echo json_encode($data);
         }
         
         public function index_put(){
@@ -116,7 +116,7 @@ class Users extends REST_Controller {
             
             $this->user->update($data);
             
-            $this->set_response(json_encode($data));
+            echo json_encode($data);
         }
         
         public function index_delete(){
