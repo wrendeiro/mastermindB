@@ -1,10 +1,17 @@
 <?php
+require APPPATH . '/libraries/REST_Controller.php';
+
 class Scores extends REST_Controller {
     
         public function __construct($config = 'rest') {
             header('Access-Control-Allow-Origin: *');
-            header("Access-Control-Allow-Methods: GET, POST");
+            header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+            header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
             parent::__construct($config);
+        }
+        
+        public function index_options(){
+            
         }
 
         public function index_post(){
@@ -69,11 +76,11 @@ class Scores extends REST_Controller {
                 $error_msg .= "  - Specify action.\n";
             }
             
-            if(empty($nmUser))
-            {
-                $validate = false;
-                $error_msg .= "  - Token has not been informed.";
-            }
+//            if(empty($nmUser))
+//            {
+//                $validate = false;
+//                $error_msg .= "  - Token has not been informed.";
+//            }
             
             if($validate){
                 $data = array(

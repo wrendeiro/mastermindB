@@ -17,7 +17,7 @@ class Score extends CI_Model {
         if(!empty($resultUser)){
             //$resultScore = $tableScores->find(array('idUser' => $resultUser['_id']));
             $resultScore = $tableScores->aggregate(
-                    array('$group' => array('idUser' => $resultUser['_id'], 'pts' => array('$sum' => '$vlScore')))
+                    array('$group' => array('_id' => array('idUser' => '$idUser'), 'pts' => array('$sum' => '$vlScore')))
             );
             $result = $resultScore;
         }
@@ -38,7 +38,7 @@ class Score extends CI_Model {
         $resultUser = $tableUsers->findOne($params);
         if(!empty($resultUser)){
             $resultScore = $tableScores->find(array('idUser' => $resultUser['_id']));
-            $result = $resultScore;
+            $result = iterator_to_array($resultScore);
         }
         else
         {
@@ -60,7 +60,7 @@ class Score extends CI_Model {
             $data = array(
                 'idUser' => $resultUser['_id'],
                 'vlScore' => $params['vlScore'],
-                'dtScore' => date()
+                'dtScore' => date('Y-m-d H:i:s')
             );
             $tableScores->insert($data);
             

@@ -1,29 +1,22 @@
 <?php
 require APPPATH . '/libraries/REST_Controller.php';
 
-//            $this->load->library("JWT");
-//            $CONSUMER_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-//            $CONSUMER_SECRET = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-//            $CONSUMER_TTL = 86400;
-//            echo $this->jwt->encode(array(
-//              'consumerKey'=>$CONSUMER_KEY,
-//              'userId'=>345,
-//              'issuedAt'=>date(DATE_ISO8601, strtotime("now")),
-//              'ttl'=>$CONSUMER_TTL
-//            ), $CONSUMER_SECRET);
-
 
 class Users extends REST_Controller {
     
         public function __construct($config = 'rest') {
             header('Access-Control-Allow-Origin: *');
-            header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+            header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Access-Control-Allow-Origin");
+            header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
             parent::__construct($config);
         }
 
+        public function index_options(){
+            
+        }
+        
         public function index_post(){
             $this->load->model('user');
-            //$params = json_decode();
             
             $nmUser = $this->post('nmUser');
             $nmEmail = $this->post('nmEmail');
@@ -41,6 +34,7 @@ class Users extends REST_Controller {
             
             $data = array(
                 "nmUser" => $nmUser,
+                "nmEmail" => $nmEmail,
                 "nmPassword" => $nmPass,
                 "nmToken" => $generatedToken
             );
@@ -55,6 +49,7 @@ class Users extends REST_Controller {
             else
             {
                 $data['success'] = true;
+                unset($data['nmPassword']);
             }
             
             echo json_encode($data);
