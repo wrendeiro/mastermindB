@@ -8,11 +8,13 @@ class User extends CI_Model {
     }
     
     function show(){
+        
         $m = new MongoClient();
         $db = $m->selectDB("database");
         $tableUsers = $db->selectCollection("users");
         $result = $tableUsers->find();
         $result = iterator_to_array($result);
+        return $result;
     }
 
     function insert($params)
@@ -27,12 +29,18 @@ class User extends CI_Model {
     {
         $m = new MongoClient();
         $db = $m->selectDB("database");
+        $email = $params['nmEmail'];
+        unset($params['nmEmail']);
         $tableUsers = $db->selectCollection("users");
-        $tableUsers->update($params);
+        
+        $tableUsers->update(array("nmEmail" => $email), $params);
     }
     
     function delete($params){
-        
+        $m = new MongoClient();
+        $db = $m->selectDB("database");
+        $tableUsers = $db->users;
+        $tableUsers->remove(array('nmEmail' => $params['nmEmail']));
     }
 
 }
