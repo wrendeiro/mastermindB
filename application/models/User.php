@@ -13,7 +13,6 @@ class User extends CI_Model {
         $tableUsers = $db->selectCollection("users");
         $result = $tableUsers->find();
         $result = iterator_to_array($result);
-        print_r($result);
     }
 
     function insert($params)
@@ -26,7 +25,10 @@ class User extends CI_Model {
 
     function update($params)
     {
-        $this->mongo_db->update('entries', $this, array('id' => $_POST['id']));
+        $m = new MongoClient();
+        $db = $m->selectDB("database");
+        $tableUsers = $db->selectCollection("users");
+        $tableUsers->update($params);
     }
     
     function delete($params){

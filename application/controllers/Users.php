@@ -21,21 +21,22 @@ class Users extends REST_Controller {
             
             $nmUser = $this->post('nmUser');
             $nmPass = $this->post('nmPassword');
-            $nmToken = $this->post('token');
+            $nmEmail= $this->post('nmEmail');
             
             $this->load->library("JWT");
             $CONSUMER_KEY = $nmPass;
             $CONSUMER_SECRET = '034580684';
             $generatedToken = $this->jwt->encode(array(
               'consumerKey'=>$CONSUMER_KEY,
-              'userId'=>$nmUser
+              'userId'=>$nmUser,
+              'userEmail' => $nmEmail  
             ), $CONSUMER_SECRET);
             
             
             $data = array(
                 "nmUser" => $nmUser,
                 "nmPassword" => $nmPass,
-                "nmTokenFacebook" => $generatedToken
+                "nmToken" => $generatedToken
             );
             
             
