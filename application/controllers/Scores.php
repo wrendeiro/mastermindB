@@ -97,19 +97,22 @@ class Scores extends REST_Controller {
                 }
                 
                 if(!empty($data)){
-                    $data['success'] = true;
+                    $responseData = array(
+                        'success' => true,
+                        'data' => $data
+                    );
                 }
                 else
                 {
-                    $data = array(
+                    $responseData = array(
                         'success' => true,
-                        'message' => 'Nothing found!'
+                        'data' => array()
                     );
                 }
             }
             else
             {
-                $data = array(
+                $responseData = array(
                     'success' => false,
                     'message' => $error_msg
                 );
@@ -117,6 +120,6 @@ class Scores extends REST_Controller {
             
             
             
-            echo json_encode($data);
+            echo json_encode($responseData);
         }
 }

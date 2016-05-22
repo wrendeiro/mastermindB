@@ -12,18 +12,20 @@ class Score extends CI_Model {
         $db = $m->selectDB("database");
         $tableUsers = $db->selectCollection("users");
         $tableScores = $db->selectCollection("scores");
+        $result = array();
         
-        $resultUser = $tableUsers->findOne($params);
-        if(!empty($resultUser)){
-            //$resultScore = $tableScores->find(array('idUser' => $resultUser['_id']));
-            $resultScore = $tableScores->aggregate(
-                    array('$group' => array('_id' => array('idUser' => '$idUser'), 'pts' => array('$sum' => '$vlScore')))
+        
+        $colUser = $tableUsers->find();
+        foreach ($colUser as $user){
+            $pts = 0;
+            $resultScore = $tableScores->find(array('idUser' => $user['_id']));
+            foreach ($resultScore as $score){
+                $pts += $score['vlScore'];
+            }
+            $result[] = array(
+                'nmUser' => $user['nmUser'],
+                'pts' => $pts
             );
-            $result = $resultScore;
-        }
-        else
-        {
-            $result = array();
         }
         
         return $result;
@@ -34,15 +36,19 @@ class Score extends CI_Model {
         $db = $m->selectDB("database");
         $tableUsers = $db->selectCollection("users");
         $tableScores = $db->selectCollection("scores");
+        $result = array();
         
         $resultUser = $tableUsers->findOne($params);
         if(!empty($resultUser)){
             $resultScore = $tableScores->find(array('idUser' => $resultUser['_id']));
-            $result = iterator_to_array($resultScore);
-        }
-        else
-        {
-            $result = array();
+            
+            $resultScore->sort(array('dtScore' => -1));
+            foreach($resultScore as $score){
+                $result[] = array(
+                    'dtScore' => $score['dtScore'],
+                    'vlScore' => $score['vlScore']
+                );
+            }
         }
         
         return $result;

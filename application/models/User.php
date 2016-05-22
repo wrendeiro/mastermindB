@@ -56,5 +56,15 @@ class User extends CI_Model {
         $tableUsers = $db->users;
         $tableUsers->remove(array('nmEmail' => $params['nmEmail']));
     }
+    
+    function recoverPass($params){
+        $m = new MongoClient();
+        $db = $m->selectDB("database");
+        $tableUsers = $db->selectCollection("users");
+        $result = $tableUsers->findOne($params);
+        
+        
+        return $result;
+    }
 
 }
