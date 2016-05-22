@@ -22,7 +22,21 @@ class User extends CI_Model {
         $m = new MongoClient();
         $db = $m->selectDB("database");
         $tableUsers = $db->selectCollection("users");
-        $tableUsers->insert($params);
+        
+        $orC = "function() {
+            return this.nmUser == '".$params['nmUser']."' || this.nmEmail == '".$params['nmEmail']."';
+        }";
+        $val = $tableUsers->findOne(array('$where' => $orC));
+        if(empty($val)){
+            $tableUsers->insert($params);
+            $result = true;
+        }
+        else
+        {
+            $result = false;
+        }
+        
+        return $result;
     }
 
     function update($params)

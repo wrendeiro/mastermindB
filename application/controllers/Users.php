@@ -46,7 +46,16 @@ class Users extends REST_Controller {
             );
             
             
-            $this->user->insert($data);
+            if(!$this->user->insert($data)){
+                $data = array(
+                    'success' => false,
+                    'message' => 'User already exists!'
+                );
+            }
+            else
+            {
+                $data['success'] = true;
+            }
             
             echo json_encode($data);
             
