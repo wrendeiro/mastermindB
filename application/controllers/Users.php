@@ -14,6 +14,12 @@ require APPPATH . '/libraries/REST_Controller.php';
 
 
 class Users extends REST_Controller {
+    
+        public function __construct($config = 'rest') {
+            header('Access-Control-Allow-Origin: *');
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+            parent::__construct($config);
+        }
 
         public function index_post(){
             $this->load->model('user');
