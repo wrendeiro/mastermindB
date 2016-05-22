@@ -26,38 +26,66 @@ class Users extends REST_Controller {
             //$params = json_decode();
             
             $nmUser = $this->post('nmUser');
+            $nmEmail = $this->post('nmEmail');
             $nmPass = $this->post('nmPassword');
-            $nmEmail= $this->post('nmEmail');
             
             $this->load->library("JWT");
             $CONSUMER_KEY = $nmPass;
             $CONSUMER_SECRET = '034580684';
             $generatedToken = $this->jwt->encode(array(
               'consumerKey'=>$CONSUMER_KEY,
-              'userId'=>$nmUser,
-              'userEmail' => $nmEmail  
+              'nmUser' => $nmUser,
+              'nmEmail' => $nmEmail  
             ), $CONSUMER_SECRET);
             
             
             $data = array(
                 "nmUser" => $nmUser,
                 "nmPassword" => $nmPass,
-                "nmEmail" => $nmEmail,
                 "nmToken" => $generatedToken
             );
             
             
             $this->user->insert($data);
             
-            $this->set_response($data);
+            $this->set_response(json_encode($data));
             
         }
         
         public function index_get(){
             $this->load->model('user');
-            $data = $this->user->show();
+            $nmUser = $this->get('nmUser');
+            $nmPass = $this->get('nmPassword');
             
-            $this->set_response($data);
+            if(!empty($nmUser) && !empty($nmPass)){
+                $data = array(
+                    'nmUser'     => $nmUser,
+                    'nmPassword' => $nmPass
+                );
+                
+                $data = $this->user->show($data);
+                if(!empty($data)){
+                    $data['success'] = true;
+                }
+                else
+                {
+                    $data = array(
+                        'success' => false,
+                        'message' => 'Wrong username or password.'
+                    );
+                }
+            }
+            else
+            {
+                $data = array(
+                    'success' => false,
+                    'message' => 'User and/or Password has not been informed.'
+                );
+            }
+            
+            
+            
+            $this->set_response(json_encode($data));
         }
         
         public function index_put(){
@@ -73,8 +101,8 @@ class Users extends REST_Controller {
             $CONSUMER_SECRET = '034580684';
             $generatedToken = $this->jwt->encode(array(
               'consumerKey'=>$CONSUMER_KEY,
-              'userId'=>$nmUser,
-              'userEmail' => $nmEmail  
+              'nmUser'=>$nmUser,
+              'nmEmail' => $nmEmail  
             ), $CONSUMER_SECRET);
             
             
@@ -88,7 +116,7 @@ class Users extends REST_Controller {
             
             $this->user->update($data);
             
-            $this->set_response($data);
+            $this->set_response(json_encode($data));
         }
         
         public function index_delete(){

@@ -7,13 +7,13 @@ class User extends CI_Model {
         parent::__construct();
     }
     
-    function show(){
+    function show($params){
         
         $m = new MongoClient();
         $db = $m->selectDB("database");
         $tableUsers = $db->selectCollection("users");
-        $result = $tableUsers->find();
-        $result = iterator_to_array($result);
+        $result = $tableUsers->findOne($params);
+        
         return $result;
     }
 
